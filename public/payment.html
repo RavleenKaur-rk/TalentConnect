@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - TalentConnect (Razorpay)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .payment-container { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 900px; width: 100%; overflow: hidden; animation: slideUp 0.5s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .payment-header { background: linear-gradient(135deg, #0c3c8c, #1e5bc6); color: white; padding: 30px; text-align: center; position: relative; overflow: hidden; }
+    .payment-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%); transform: rotate(30deg); }
+    .payment-header h1 { font-size: 28px; margin-bottom: 10px; position: relative; }
+    .payment-header p { opacity: 0.9; font-size: 16px; position: relative; }
+    .razorpay-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin-top: 15px; font-size: 14px; position: relative; backdrop-filter: blur(10px); }
+    .payment-body { display: grid; grid-template-columns: 1.5fr 1fr; gap: 0; }
+    .payment-methods-section { padding: 40px; border-right: 1px solid #e5e7eb; }
+    .order-summary-section { padding: 40px; background: #f9fafb; }
+    h2 { color: #0c3c8c; margin-bottom: 25px; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+    .razorpay-info { background: #e7f3ff; border-left: 4px solid #0c3c8c; padding: 20px; border-radius: 12px; margin-bottom: 30px; }
+    .razorpay-info h3 { color: #0c3c8c; margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+    .razorpay-info ul { list-style: none; padding: 0; }
+    .razorpay-info li { padding: 8px 0; color: #333; display: flex; align-items: center; gap: 10px; }
+    .razorpay-info li i { color: #10b981; font-size: 16px; }
+    .payment-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 25px 0; }
+    .payment-option { padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; background: white; }
+    .payment-option i { font-size: 32px; color: #0c3c8c; }
+    .payment-option span { font-size: 14px; font-weight: 600; color: #333; }
+    .event-info { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .event-info h3 { color: #0c3c8c; margin-bottom: 15px; font-size: 18px; }
+    .event-detail { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: #666; font-size: 14px; }
+    .event-detail i { color: #0c3c8c; width: 20px; }
+    .price-breakdown { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .order-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #e5e7eb; }
+    .order-item:last-child { border-bottom: none; }
+    .order-item-label { color: #666; font-size: 15px; }
+    .order-item-value { font-weight: 600; color: #333; font-size: 15px; }
+    .total-amount { background: linear-gradient(135deg, #0c3c8c, #1e5bc6); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; box-shadow: 0 5px 15px rgba(12, 60, 140, 0.2); }
+    .total-amount .label { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
+    .total-amount .amount { font-size: 36px; font-weight: bold; }
+    .razorpay-button { width: 100%; padding: 18px; background: #0c3c8c; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 25px; position: relative; overflow: hidden; }
+    .razorpay-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: all 0.5s; }
+    .razorpay-button:hover:not(:disabled) { background: #1e5bc6; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(12, 60, 140, 0.3); }
+    .razorpay-button:hover:not(:disabled)::before { left: 100%; }
+    .razorpay-button:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+    .test-credentials { background: #fff3cd; border: 2px dashed #ffc107; border-radius: 12px; padding: 20px; margin-top: 20px; }
+    .test-credentials h4 { color: #856404; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .test-credentials .credential-item { background: white; padding: 12px; border-radius: 8px; margin: 10px 0; font-family: monospace; font-size: 13px; }
+    .test-credentials .credential-label { font-weight: 600; color: #856404; display: block; margin-bottom: 5px; }
+    .payment-footer { text-align: center; padding: 20px; border-top: 1px solid #e5e7eb; color: #666; font-size: 13px; }
+    .payment-footer i { color: #10b981; margin-right: 5px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; padding: 50px; border-radius: 20px; text-align: center; max-width: 500px; animation: scaleIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; }
+    @keyframes scaleIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-icon { width: 100px; height: 100px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; animation: bounce 0.6s ease; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    .success-icon i { font-size: 50px; color: white; }
+    .modal-content h2 { color: #10b981; margin-bottom: 15px; font-size: 32px; }
+    .transaction-id { background: #f9fafb; padding: 15px; border-radius: 10px; margin: 25px 0; font-family: monospace; font-size: 16px; color: #0c3c8c; font-weight: bold; border: 1px dashed #0c3c8c; }
+    .modal-buttons { display: flex; gap: 15px; margin-top: 30px; }
+    .modal-buttons button { flex: 1; padding: 14px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; transition: all 0.3s; }
+    .btn-primary { background: #0c3c8c; color: white; }
+    .btn-primary:hover { background: #1e5bc6; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(12, 60, 140, 0.3); }
+    .btn-secondary { background: #f3f4f6; color: #4b5563; }
+    .btn-secondary:hover { background: #e5e7eb; transform: translateY(-2px); }
+    @media (max-width: 768px) {
+      .payment-body { grid-template-columns: 1fr; }
+      .payment-methods-section { border-right: none; border-bottom: 1px solid #e5e7eb; }
+      .payment-options { grid-template-columns: repeat(2, 1fr); }
+      .modal-content { padding: 30px 20px; margin: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <div class="payment-header">
+      <h1>💳 Secure Payment with Razorpay</h1>
+      <p>Fast, secure, and trusted by millions</p>
+      <div class="razorpay-badge"><i class="fas fa-shield-alt"></i><span>Powered by Razorpay</span></div>
+    </div>
+    <div class="payment-body">
+      <div class="payment-methods-section">
+        <h2><i class="fas fa-credit-card"></i> Payment Options</h2>
+        <div class="razorpay-info">
+          <h3><i class="fas fa-check-circle"></i> Why Razorpay?</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> 100+ payment methods supported</li>
+            <li><i class="fas fa-check"></i> Bank-grade security</li>
+            <li><i class="fas fa-check"></i> Instant payment confirmation</li>
+            <li><i class="fas fa-check"></i> No hidden charges</li>
+            <li><i class="fas fa-check"></i> Trusted by 8M+ businesses</li>
+          </ul>
+        </div>
+        <h3 style="font-size: 16px; margin-bottom: 15px; color: #666;">Available Payment Methods:</h3>
+        <div class="payment-options">
+          <div class="payment-option"><i class="fas fa-credit-card"></i><span>Credit/Debit Card</span></div>
+          <div class="payment-option"><i class="fas fa-mobile-alt"></i><span>UPI</span></div>
+          <div class="payment-option"><i class="fas fa-university"></i><span>Net Banking</span></div>
+          <div class="payment-option"><i class="fas fa-wallet"></i><span>Wallets</span></div>
+          <div class="payment-option"><i class="fas fa-qrcode"></i><span>QR Code</span></div>
+          <div class="payment-option"><i class="fas fa-mobile"></i><span>EMI</span></div>
+        </div>
+        <button class="razorpay-button" onclick="initiateRazorpayPayment()"><i class="fas fa-lock"></i>Pay ₹<span id="payButtonAmount">0</span> with Razorpay</button>
+        <div class="payment-footer"><i class="fas fa-shield-alt"></i>Your payment is secured with 256-bit SSL encryption</div>
+      </div>
+      <div class="order-summary-section">
+        <h2><i class="fas fa-receipt"></i> Order Summary</h2>
+        <div class="event-info">
+          <h3 id="eventName">Loading...</h3>
+          <div class="event-detail"><i class="fas fa-calendar-alt"></i><span id="eventDate">Loading...</span></div>
+          <div class="event-detail"><i class="fas fa-clock"></i><span id="eventTime">Loading...</span></div>
+          <div class="event-detail"><i class="fas fa-map-marker-alt"></i><span id="eventVenue">Loading...</span></div>
+          <div class="event-detail"><i class="fas fa-ticket-alt"></i><span id="ticketCount">0 Tickets</span></div>
+        </div>
+        <div class="price-breakdown">
+          <div class="order-item"><span class="order-item-label">Ticket Price (×<span id="ticketQty">0</span>)</span><span class="order-item-value">₹<span id="ticketPrice">0</span></span></div>
+          <div class="order-item"><span class="order-item-label">Booking Fee</span><span class="order-item-value">₹<span id="bookingFee">0</span></span></div>
+          <div class="order-item"><span class="order-item-label">GST (18%)</span><span class="order-item-value">₹<span id="gstAmount">0</span></span></div>
+        </div>
+        <div class="total-amount">
+          <div class="label">Total Amount</div>
+          <div class="amount">₹<span id="totalAmount">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="success-icon"><i class="fas fa-check"></i></div>
+      <h2>Payment Successful!</h2>
+      <p>Your booking has been confirmed successfully</p>
+      <div class="transaction-id">Razorpay Payment ID: <span id="razorpayId">-</span></div>
+      <p style="margin-top: 15px;"><strong>Amount Paid:</strong> ₹<span id="paidAmount">0</span></p>
+      <p style="margin-top: 10px; font-size: 14px; color: #666;">Redirecting you to your bookings...</p>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <script>
+    const RAZORPAY_KEY_ID = 'rzp_test_1DP5mmOlF5G5ag';
+    const firebaseConfig = {
+      apiKey: "AIzaSyBE5yRL0Vx6a1asXMMioEr3t9Ah2w3QxtM",
+      authDomain: "talent-f474d.firebaseapp.com",
+      projectId: "talent-f474d",
+      storageBucket: "talent-f474d.firebasestorage.app",
+      messagingSenderId: "826760976811",
+      appId: "1:826760976811:web:34c70fe2619bd047885aee",
+      measurementId: "G-7L12448Y3H",
+      databaseURL: "https://talent-f474d-default-rtdb.firebaseio.com",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+    let bookingData = JSON.parse(localStorage.getItem('bookingData'));
+    let currentUser = null;
+    if (!bookingData) { alert('No booking data found. Redirecting to browse events...'); window.location.href = '/browse'; }
+    auth.onAuthStateChanged((user) => {
+      if (user) { currentUser = user; } 
+      else { alert('Please login to continue'); window.location.href = '/login'; }
+    });
+    function initializePage() {
+      if (!bookingData) return;
+      document.getElementById('eventName').textContent = bookingData.eventName;
+      document.getElementById('eventDate').textContent = bookingData.eventDate;
+      document.getElementById('eventTime').textContent = bookingData.eventTime;
+      document.getElementById('eventVenue').textContent = bookingData.eventVenue;
+      document.getElementById('ticketCount').textContent = `${bookingData.ticketCount} Tickets`;
+      document.getElementById('ticketQty').textContent = bookingData.ticketCount;
+      document.getElementById('ticketPrice').textContent = bookingData.ticketPrice * bookingData.ticketCount;
+      document.getElementById('bookingFee').textContent = bookingData.bookingFee;
+      document.getElementById('gstAmount').textContent = bookingData.gstAmount;
+      document.getElementById('totalAmount').textContent = bookingData.totalAmount;
+      document.getElementById('payButtonAmount').textContent = bookingData.totalAmount;
+    }
+    function initiateRazorpayPayment() {
+      if (!currentUser) { alert('Please login to continue'); return; }
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: bookingData.totalAmount * 100,
+        currency: 'INR',
+        name: 'TalentConnect',
+        description: bookingData.eventName,
+        image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+        prefill: { name: currentUser.displayName || 'Guest User', email: currentUser.email || 'guest@example.com', contact: '9999999999' },
+        notes: { eventName: bookingData.eventName, ticketCount: bookingData.ticketCount, userId: currentUser.uid },
+        theme: { color: '#0c3c8c' },
+        handler: function (response) { handlePaymentSuccess(response); },
+        modal: { ondismiss: function() { console.log('Payment cancelled by user'); } }
+      };
+      const razorpay = new Razorpay(options);
+      razorpay.on('payment.failed', function (response) { handlePaymentFailure(response); });
+      razorpay.open();
+    }
+    async function handlePaymentSuccess(response) {
+      console.log('Payment successful:', response);
+      const bookingId = 'BK' + Date.now();
+      
+      const bookingRecord = {
+        id: bookingId,
+        bookingId: bookingId,
+        eventId: bookingData.eventId,
+        eventTitle: bookingData.eventName,
+        eventName: bookingData.eventName,
+        eventDate: bookingData.eventDate,
+        eventTime: bookingData.eventTime,
+        eventVenue: bookingData.eventVenue,
+        eventLocation: bookingData.eventVenue,
+        eventImage: bookingData.eventImage || '',
+        ticketCount: bookingData.ticketCount,
+        tickets: bookingData.ticketCount,
+        ticketPrice: bookingData.ticketPrice,
+        pricePerTicket: bookingData.ticketPrice,
+        bookingFee: bookingData.bookingFee,
+        platformFee: bookingData.bookingFee,
+        gstAmount: bookingData.gstAmount,
+        totalAmount: bookingData.totalAmount,
+        totalPrice: bookingData.totalAmount,
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpayOrderId: response.razorpay_order_id || '',
+        razorpaySignature: response.razorpay_signature || '',
+        transactionId: response.razorpay_payment_id,
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
+        userName: currentUser.displayName || 'Guest User',
+        customerName: currentUser.displayName || 'Guest User',
+        customerEmail: currentUser.email,
+        paymentMethod: 'razorpay',
+        paymentStatus: 'success',
+        bookingDate: new Date().toISOString(),
+        status: 'confirmed'
+      };
+
+      try {
+        // Wait for booking to be saved
+        await database.ref(`bookings/${currentUser.uid}/${bookingId}`).set(bookingRecord);
+        await database.ref(`allBookings/${bookingId}`).set(bookingRecord);
+        
+        // Update event statistics
+        if (bookingData.eventId) {
+          const eventRef = database.ref(`events/${bookingData.eventId}`);
+          await eventRef.transaction((event) => {
+            if (event) {
+              event.totalBookings = (event.totalBookings || 0) + parseInt(bookingData.ticketCount);
+              event.totalRevenue = (event.totalRevenue || 0) + parseFloat(bookingData.totalAmount);
+              event.attendees = (event.attendees || 0) + parseInt(bookingData.ticketCount);
+            }
+            return event;
+          });
+        }
+
+        console.log('Booking saved successfully:', bookingId);
+        localStorage.removeItem('bookingData');
+        
+        // Show success message and redirect
+        alert('🎉 Payment Successful!\n\nYour booking has been confirmed.\nBooking ID: ' + bookingId + '\n\nRedirecting to your bookings...');
+        window.location.href = '/bookings?payment=success';
+        
+      } catch (error) {
+        console.error('Error saving booking:', error);
+        alert('Payment successful!\nPayment ID: ' + response.razorpay_payment_id + '\n\nThere was an issue saving your booking. Please contact support with your Payment ID.');
+        // Still redirect to bookings page
+        setTimeout(() => {
+          window.location.href = '/bookings';
+        }, 2000);
+      }
+    }
+    function handlePaymentFailure(response) {
+      console.error('Payment failed:', response);
+      alert('Payment failed: ' + response.error.description + '\n\nPlease try again.');
+    }
+    function downloadReceipt() {
+      const receiptContent = `
+═══════════════════════════════════════════
+🎫  TALENTCONNECT PAYMENT RECEIPT
+═══════════════════════════════════════════
+
+Razorpay Payment ID: ${document.getElementById('razorpayId').textContent}
+Date: ${new Date().toLocaleString()}
+Status: SUCCESS ✓
+
+───────────────────────────────────────────
+EVENT DETAILS
+───────────────────────────────────────────
+
+Event: ${bookingData.eventName}
+Date: ${bookingData.eventDate}
+Time: ${bookingData.eventTime}
+Venue: ${bookingData.eventVenue}
+
+───────────────────────────────────────────
+PAYMENT BREAKDOWN
+───────────────────────────────────────────
+
+Number of Tickets: ${bookingData.ticketCount}
+Ticket Price: ₹${bookingData.ticketPrice * bookingData.ticketCount}
+Booking Fee: ₹${bookingData.bookingFee}
+GST (18%): ₹${bookingData.gstAmount}
+
+───────────────────────────────────────────
+TOTAL PAID: ₹${bookingData.totalAmount}
+───────────────────────────────────────────
+
+Payment Method: Razorpay
+Payment Gateway: Secure & Trusted
+
+Thank you for booking with TalentConnect!
+For support: support@talentconnect.com
+
+═══════════════════════════════════════════
+      `;
+      const blob = new Blob([receiptContent], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `TalentConnect_Receipt_${document.getElementById('razorpayId').textContent}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+    function goToBookings() { window.location.href = '/bookings'; }
+    document.addEventListener('DOMContentLoaded', initializePage);
+    if (bookingData) { initializePage(); }
+  </script>
+</body>
+</html>

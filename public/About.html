@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - TalentConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    body {
+      background: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 70px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(91, 33, 182, 0.1);
+      z-index: 1100;
+      animation: slideInLeft 0.5s ease-out;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .logo-container::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #5b21b6, #f97316);
+      transition: width 0.4s ease;
+      border-radius: 2px;
+    }
+
+    .logo-container:hover::after {
+      width: 100%;
+    }
+
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      filter: drop-shadow(0 2px 8px rgba(91, 33, 182, 0.2));
+    }
+
+    .logo-container:hover img {
+      transform: rotate(360deg) scale(1.1);
+      filter: drop-shadow(0 4px 12px rgba(91, 33, 182, 0.4));
+    }
+    
+    .logo-text {
+      background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .logo-container:hover .logo-text {
+      letter-spacing: 2px;
+    }
+    
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 17px;
+      padding: 10px 6px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #5b21b6, #f97316);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    
+    nav a:hover {
+      color: #5b21b6;
+      transform: translateY(-2px);
+    }
+
+    nav a:hover::before {
+      width: 100%;
+    }
+    
+    nav a.active {
+      color: #5b21b6;
+    }
+
+    nav a.active::before {
+      width: 100%;
+    }
+    
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1200;
+    }
+    
+    .menu-toggle span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: #5b21b6;
+      margin: 5px 0;
+      transition: 0.3s;
+      border-radius: 3px;
+    }
+    
+    .auth {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .auth button {
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    
+    .auth .login {
+      background: transparent;
+      border: 2px solid #5b21b6;
+      color: #5b21b6;
+    }
+    
+    .auth .login:hover {
+      background: #5b21b6;
+      color: #fff;
+    }
+    
+    .auth .signup {
+      background: #f97316;
+      color: #fff;
+      border: 2px solid #f97316;
+    }
+    
+    .auth .signup:hover {
+      background: #ea580c;
+    }
+
+    /* Page Content */
+    .page-content {
+      margin-top: 94px;
+      padding: 0;
+    }
+
+    /* Hero Section */
+    .about-hero {
+      background: linear-gradient(135deg, rgba(91,33,182,0.95), rgba(139,92,246,0.95)), 
+                  url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2069&auto=format&fit=crop') no-repeat center/cover;
+      padding: 100px 40px;
+      text-align: center;
+      color: white;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    .about-hero h1 {
+      font-size: 56px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      animation: fadeIn 1s ease-out 0.3s both;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .about-hero p {
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+      animation: fadeIn 1s ease-out 0.6s both;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section Styling */
+    .section {
+      padding: 70px 40px;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .section h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #5b21b6;
+      text-align: center;
+      animation: scaleIn 0.8s ease-out;
+    }
+    
+    .section h2 span {
+      color: #f97316;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .section p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      line-height: 1.8;
+      color: #4b5563;
+      text-align: center;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    .section-dark {
+      background-color: #f9fafb;
+      position: relative;
+    }
+
+    .section-dark::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(91, 33, 182, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .section-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 50px;
+      margin-top: 50px;
+    }
+    
+    .how-column {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .how-column:first-child {
+      animation: slideInLeft 0.8s ease-out;
+    }
+
+    .how-column:last-child {
+      animation: slideInRight 0.8s ease-out;
+    }
+
+    .how-column h3 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #5b21b6;
+      display: flex;
+      align-items: center;
+      animation: scaleIn 0.6s ease-out;
+    }
+    
+    .how-column h3 i {
+      margin-right: 15px;
+      font-size: 30px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .step-list {
+      list-style: none;
+    }
+    
+    .step-list li {
+      margin-bottom: 25px;
+      padding-left: 40px;
+      position: relative;
+      animation: fadeIn 0.6s ease-out both;
+      transition: all 0.3s ease;
+    }
+
+    .step-list li:nth-child(1) { animation-delay: 0.1s; }
+    .step-list li:nth-child(2) { animation-delay: 0.2s; }
+    .step-list li:nth-child(3) { animation-delay: 0.3s; }
+    .step-list li:nth-child(4) { animation-delay: 0.4s; }
+
+    .step-list li:hover {
+      transform: translateX(10px);
+      color: #5b21b6;
+    }
+    
+    .step-list li:before {
+      content: "•";
+      color: #5b21b6;
+      font-size: 24px;
+      position: absolute;
+      left: 0;
+      top: -2px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .feature-item {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(91, 33, 182, 0.05);
+      position: relative;
+      overflow: hidden;
+      animation: scaleIn 0.6s ease-out both;
+    }
+
+    .feature-item:nth-child(1) { animation-delay: 0.1s; }
+    .feature-item:nth-child(2) { animation-delay: 0.2s; }
+    .feature-item:nth-child(3) { animation-delay: 0.3s; }
+    .feature-item:nth-child(4) { animation-delay: 0.4s; }
+    .feature-item:nth-child(5) { animation-delay: 0.5s; }
+    .feature-item:nth-child(6) { animation-delay: 0.6s; }
+
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(91, 33, 182, 0.05) 0%, transparent 100%);
+      transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-item:hover::before {
+      top: 0;
+    }
+    
+    .feature-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 45px rgba(91, 33, 182, 0.2);
+      border-color: #5b21b6;
+    }
+    
+    .feature-icon {
+      font-size: 40px;
+      color: #5b21b6;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .feature-item:hover .feature-icon {
+      transform: scale(1.2) rotateY(360deg);
+    }
+    
+    .feature-item h3 {
+      color: #5b21b6;
+      margin-bottom: 15px;
+      font-size: 22px;
+      transition: color 0.3s ease;
+    }
+
+    .feature-item:hover h3 {
+      color: #7c3aed;
+    }
+    
+    .feature-item p {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .contact-item {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: scaleIn 0.6s ease-out both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-item:nth-child(1) { animation-delay: 0.1s; }
+    .contact-item:nth-child(2) { animation-delay: 0.2s; }
+    .contact-item:nth-child(3) { animation-delay: 0.3s; }
+    .contact-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .contact-item::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(91, 33, 182, 0.05) 0%, transparent 100%);
+      transition: top 0.5s ease;
+    }
+
+    .contact-item:hover::before {
+      top: 0;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(91, 33, 182, 0.2);
+    }
+    
+    .contact-icon {
+      font-size: 40px;
+      color: #5b21b6;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .contact-item:hover .contact-icon {
+      transform: scale(1.2) rotateY(360deg);
+    }
+    
+    .contact-item h3 {
+      color: #5b21b6;
+      margin-bottom: 10px;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .contact-item:hover h3 {
+      color: #7c3aed;
+    }
+    
+    .contact-item p {
+      color: #666;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      padding: 80px 40px;
+      background: linear-gradient(rgba(91,33,182,0.9), rgba(91,33,182,0.9)), 
+                  url('https://images.unsplash.com/photo-1519677100203-a0e668c92439') no-repeat center/cover;
+      color: #fff;
+    }
+    
+    .cta-section h2 {
+      color: #fff;
+      margin-bottom: 20px;
+      font-size: 42px;
+    }
+    
+    .cta-section h2 span {
+      color: #fbbf24;
+    }
+    
+    .cta-section p {
+      max-width: 700px;
+      margin: 0 auto 15px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    .cta-button {
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .cta-button.primary {
+      background: #f97316;
+      color: #fff;
+      border: none;
+    }
+    
+    .cta-button.primary:hover {
+      background: #fb923c;
+      transform: translateY(-2px);
+    }
+    
+    .cta-button.secondary {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+    }
+    
+    .cta-button.secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Footer */
+    footer {
+      background: #5b21b6;
+      color: #fff;
+      padding: 54px 40px;
+    }
+    
+    footer .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    footer h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    
+    footer h4 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    
+    footer a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 10px;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+    
+    footer a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    
+    footer p {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      opacity: 0.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      header {
+        padding: 18px 40px;
+      }
+      
+      .section {
+        padding: 60px 30px;
+      }
+      
+      .features-grid,
+      .contact-info {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+      }
+      
+      .menu-toggle {
+        display: block;
+      }
+      
+      nav {
+        order: 3;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        background: #fff;
+        transition: max-height 0.3s ease;
+      }
+      
+      nav.active {
+        max-height: 400px;
+        padding: 20px 0;
+      }
+      
+      nav a {
+        margin: 0;
+        padding: 12px 20px;
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      
+      .page-content {
+        margin-top: 80px;
+      }
+      
+      .about-hero h1 {
+        font-size: 36px;
+      }
+      
+      .about-hero p {
+        font-size: 18px;
+      }
+      
+      .how-it-works,
+      .features-grid,
+      .contact-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .cta-button {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .about-hero h1 {
+        font-size: 32px;
+      }
+      
+      .section h2 {
+        font-size: 28px;
+      }
+      
+      .section {
+        padding: 50px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="logo-container">
+      <span class="logo-text">Talent</span>
+      <img src="/logo.svg" alt="TalentConnect Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <svg style="display:none; width: 50px; height: 50px;" fill="none" stroke="#5b21b6" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      <span class="logo-text">Connect</span>
+    </a>
+    
+    <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav id="navMenu">
+      <a href="/">Home</a>
+      <a href="/browse">Browse Events</a>
+      <a href="/About.html" class="active">About</a>
+      <a href="/contact">Contact</a>
+      <span id="organizerLinks" style="display: none;">
+        <a href="/host-event">Host Event</a>
+        <a href="/organizer-dashboard">Dashboard</a>
+      </span>
+    </nav>
+    
+    <div class="auth" id="authButtons">
+      <button class="login" onclick="window.location.href='/login'">Login</button>
+      <button class="signup" onclick="window.location.href='/login'">Sign Up</button>
+    </div>
+    
+    <div class="auth" id="userInfo" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 15px; border-radius: 50px; background: rgba(91, 33, 182, 0.1); transition: all 0.3s;" onclick="toggleUserDropdown()">
+        <i class="fas fa-user-circle" style="font-size: 24px; color: #5b21b6;"></i>
+        <span id="userName" style="font-weight: 600; color: #5b21b6;">User</span>
+        <i class="fas fa-chevron-down" style="font-size: 12px; color: #5b21b6;"></i>
+      </div>
+      <div id="userDropdown" style="display: none; position: absolute; top: 70px; right: 70px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-width: 200px; z-index: 1000; overflow: hidden;">
+        <div style="padding: 15px; border-bottom: 1px solid #f3f4f6;">
+          <div id="userDropdownName" style="font-weight: 600; color: #333; margin-bottom: 5px;">User</div>
+          <div id="userDropdownEmail" style="font-size: 14px; color: #6b7280;">email@example.com</div>
+        </div>
+        <a href="/profile" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #333; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid #f3f4f6;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+          <i class="fas fa-user"></i>
+          <span>My Profile</span>
+        </a>
+        <a href="/bookings.html" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #333; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid #f3f4f6;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+          <i class="fas fa-ticket-alt"></i>
+          <span>My Bookings</span>
+        </a>
+        <span id="organizerDropdownLinks" style="display: none;">
+          <a href="/host-event" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #333; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid #f3f4f6;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+            <i class="fas fa-plus-circle"></i>
+            <span>Host Event</span>
+          </a>
+          <a href="/organizer-dashboard" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #333; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid #f3f4f6;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/organizer-verification" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #333; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid #f3f4f6;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+            <i class="fas fa-shield-alt"></i>
+            <span>Verification</span>
+          </a>
+        </span>
+        <a href="#" onclick="handleLogout(event)" style="display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: #ef4444; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  
+  <div class="page-content">
+    <section class="about-hero">
+      <h1>About TalentConnect</h1>
+      <p>Your Gateway to Amazing Events & Effortless Event Organization</p>
+    </section>
+
+    <section class="section">
+      <div class="section-content">
+        <h2>Welcome to <span>TalentConnect</span></h2>
+        <p style="font-size: 20px; margin-bottom: 20px;">
+          Welcome to TalentConnect - the ultimate event booking platform where discovering great events is effortless, and organizing your own is simple and powerful.
+        </p>
+        <p style="font-size: 18px; color: #6b7280; max-width: 900px; margin: 0 auto;">
+          We're revolutionizing how people discover, book, and host events. Whether you're searching for the perfect concert, workshop, or cultural celebration - or planning to host your own amazing event - TalentConnect brings it all together in one seamless platform.
+        </p>
+      </div>
+    </section>
+    
+    <section class="section section-dark">
+      <div class="section-content">
+        <h2>What <span>We Do</span></h2>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3>Event Booking Made Simple</h3>
+            <p>Browse and book tickets for amazing local events - from intimate concerts and cultural shows to workshops and parties.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-microphone"></i>
+            </div>
+            <h3>Event Organization Made Easy</h3>
+            <p>Create your event, set your price, and let customers book instantly. Perfect for artists, creators, and organizers.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+            <h3>No Marketing Headaches</h3>
+            <p>Our platform is your advertising, reaching thousands of potential attendees without expensive marketing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-content">
+        <h2>How It <span>Works</span></h2>
+        
+        <div class="how-it-works">
+          <div class="how-column">
+            <h3><i class="fas fa-ticket-alt"></i> For Event-Goers</h3>
+            <ul class="step-list">
+              <li>Discover local events happening around you</li>
+              <li>Book tickets instantly with secure payment processing</li>
+              <li>Get confirmations immediately with all event details</li>
+              <li>Rate and review your experiences</li>
+            </ul>
+          </div>
+          
+          <div class="how-column">
+            <h3><i class="fas fa-clipboard-list"></i> For Event Organizers</h3>
+            <ul class="step-list">
+              <li>Create events in minutes - set date, price, capacity, description</li>
+              <li>Publish instantly to thousands of potential attendees</li>
+              <li>Manage bookings effortlessly - track sales, attendee lists, payments</li>
+              <li>Perfect for artists, performers, and creators</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark">
+      <div class="section-content">
+        <h2>Our <span>Mission</span></h2>
+        <p style="font-size: 19px; margin-bottom: 15px;">
+          To make event discovery and organization effortless while empowering anyone to become a successful event creator.
+        </p>
+        <p style="font-size: 18px; font-weight: 600; color: #5b21b6; margin-bottom: 30px;">
+          We're creating a vibrant ecosystem where:
+        </p>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>Great Events Find Audience</h3>
+            <p>Great events find their perfect audience through our platform</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Organizers Succeed</h3>
+            <p>Event organizers succeed without expensive marketing</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-music"></i>
+            </div>
+            <h3>Artists Thrive</h3>
+            <p>Artists can host their own shows and build direct fan relationships</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-content">
+        <h2>Why Choose <span>TalentConnect?</span></h2>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Complete Event Solution</h3>
+            <p>Book events and organize events - everything in one powerful platform.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <h3>Cost-Effective</h3>
+            <p>Digital promotion reaches more people at a fraction of traditional marketing costs.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Secure & Reliable</h3>
+            <p>Professional payment processing and trusted booking system.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-rocket"></i>
+            </div>
+            <h3>Empowers Creators</h3>
+            <p>Direct access to audiences without middlemen or expensive campaigns.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>User-Friendly</h3>
+            <p>Works perfectly on phones, tablets, and computers.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-gem"></i>
+            </div>
+            <h3>Quality Experience</h3>
+            <p>Best experience for both event organizers and attendees.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark">
+      <div class="section-content">
+        <h2>Our <span>Vision</span></h2>
+        <p style="font-size: 19px; margin-bottom: 20px;">
+          To become the go-to platform for all event-related needs - where booking a concert ticket is as easy as ordering food.
+        </p>
+        <p style="font-size: 18px; color: #6b7280;">
+          We're building more than a platform; we're creating a community where entertainment thrives, creativity is celebrated, and every event becomes a memorable experience.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <h2>Join Our <span>Community</span></h2>
+      <p>Whether you're looking to attend amazing events or organize your own celebration - you're welcome here.</p>
+      <p>Ready to discover your next great experience or share your event with the world?</p>
+      <div class="cta-buttons">
+        <a href="/browse" class="cta-button primary">Browse Events</a>
+        <a href="/host-event" class="cta-button secondary">Host an Event</a>
+      </div>
+    </section>
+
+    <section class="section contact-section">
+      <div class="section-content">
+        <h2>Get In <span>Touch</span></h2>
+        <p>Questions? Ideas? We'd love to hear from you!</p>
+        
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email</h3>
+            <p>info@talentconnect.com</p>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <h3>Phone</h3>
+            <p>+91 9876543210</p>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Location</h3>
+            <p>Based in Rajpura, India</p>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-globe"></i>
+            </div>
+            <h3>Serving</h3>
+            <p>Local communities everywhere</p>
+          </div>
+        </div>
+        
+        <p style="margin-top: 40px; font-style: italic;">
+          Join the future of event entertainment - simple, digital, and creator-driven.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="grid">
+      <div>
+        <h3>TalentConnect</h3>
+        <p>Where talent meets opportunity</p>
+      </div>
+      <div>
+        <h4>For Event Hosts</h4>
+        <a href="/host-event">Create an Event</a>
+        <a href="#">Getting Started Guide</a>
+        <a href="#">Pricing</a>
+      </div>
+      <div>
+        <h4>For Attendees</h4>
+        <a href="/browse">Browse Events</a>
+        <a href="/my-bookings">My Tickets</a>
+        <a href="#">Event Calendar</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="/contact">Contact Us</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TalentConnect. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    // Import Firebase
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+    import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoQt5wVaxeM_wHPhXuyPCXIh4Hh4sJ40Q",
+      authDomain: "talentconnect-ff146.firebaseapp.com",
+      databaseURL: "https://talentconnect-ff146-default-rtdb.firebaseio.com",
+      projectId: "talentconnect-ff146",
+      storageBucket: "talentconnect-ff146.firebasestorage.app",
+      messagingSenderId: "666412972251",
+      appId: "1:666412972251:web:c50f3ab4a43c51aa1e5d70"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    let dropdownOpen = false;
+
+    // Check auth state
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is logged in
+        document.getElementById('authButtons').style.display = 'none';
+        document.getElementById('userInfo').style.display = 'block';
+        document.getElementById('userName').textContent = user.displayName || 'User';
+        document.getElementById('userDropdownName').textContent = user.displayName || 'User';
+        document.getElementById('userDropdownEmail').textContent = user.email;
+
+        // Check if user is organizer
+        try {
+          const userRef = ref(database, 'users/' + user.uid);
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.userType === 'organiser') {
+              document.getElementById('organizerLinks').style.display = 'inline';
+              document.getElementById('organizerDropdownLinks').style.display = 'block';
+            }
+          }
+        } catch (error) {
+          console.error('Error loading user data:', error);
+        }
+      } else {
+        // User is not logged in
+        document.getElementById('authButtons').style.display = 'flex';
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('organizerLinks').style.display = 'none';
+      }
+    });
+
+    window.toggleUserDropdown = function() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdownOpen = !dropdownOpen;
+      dropdown.style.display = dropdownOpen ? 'block' : 'none';
+    };
+
+    window.handleLogout = async function(event) {
+      event.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = '/';
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Error logging out. Please try again.');
+      }
+    };
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const userInfo = document.getElementById('userInfo');
+      const dropdown = document.getElementById('userDropdown');
+      if (userInfo && !userInfo.contains(e.target) && dropdown) {
+        dropdown.style.display = 'none';
+        dropdownOpen = false;
+      }
+    });
+
+    function toggleMenu() {
+      const navMenu = document.getElementById('navMenu');
+      const menuToggle = document.getElementById('menuToggle');
+      navMenu.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    }
+    
+    window.toggleMenu = toggleMenu;
+
+    // Close menu when clicking on a link
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('nav a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            const navMenu = document.getElementById('navMenu');
+            const menuToggle = document.getElementById('menuToggle');
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
